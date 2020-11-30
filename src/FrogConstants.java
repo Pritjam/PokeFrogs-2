@@ -1,4 +1,7 @@
 public interface FrogConstants {
+
+	public static final int VERSION_ID = 1;
+
 	public static final String[] NAMES = { "Jim", "Hank", "Todd" };
 
 	// combination table to get a color from a given pair of alleles
@@ -12,6 +15,15 @@ public interface FrogConstants {
 			{ "BLK", "BLK", "BLK", "BLK", "GLS" }, // blk
 			{ "RED", "YLW", "BLU", "GLS", "WHT" } //  wht
 	};
+
+	/**
+	 * A method to get the color from a given genotype
+	 * @param genotype the int[] representation of the color genes
+	 * @return the 3-letter String of the phenotype
+	 */
+	public static String getColor(int[] genotype) {
+		return COLOR_PHENOTYPES[genotype[0]][genotype[1]];
+	}
 
 	// combination table to get a pattern from a given pair of alleles
 	// basic options-plain (recessive), spotted, camo, stripes (all dominant)
