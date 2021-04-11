@@ -1,6 +1,4 @@
-public interface FrogConstants {
-
-	public static final int VERSION_ID = 1;
+public interface Constants {
 
 	public static final String[] NAMES = { "Jim", "Hank", "Todd" };
 
