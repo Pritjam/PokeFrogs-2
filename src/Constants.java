@@ -11,7 +11,7 @@ public interface Constants {
 			{ "ORN", "YLW", "GRN", "BLK", "YLW" }, // ylw
 			{ "PRP", "GRN", "BLU", "BLK", "BLU" }, // blu
 			{ "BLK", "BLK", "BLK", "BLK", "GLS" }, // blk
-			{ "RED", "YLW", "BLU", "GLS", "WHT" } //  wht
+			{ "RED", "YLW", "BLU", "GLS", "WHT" }  // wht
 	};
 
 	/**
@@ -28,22 +28,26 @@ public interface Constants {
 	// combo of any 2 dominants results in a mix (codominance)
 	// homozygous combination of a dominant gene has a small chance to result in 
 	// a mutation: spotted -> stars, camo -> fractal, and stripes -> spiral
+	public static final String[][] PATTERN_PHENOTYPES = {
+		//spot              camo            strp               pln
+		{"STARS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS"},      //SPOTTED
+		{"SPOTTED CAMO",    "FRACTALS",     "STRIPED CAMO",    "CAMO"},       //CAMO
+		{"SPOTTED STRIPES", "STRIPED CAMO", "SPIRALS",         "STRIPES"},    //STRIPED
+		{"SPOTS",           "CAMO",         "STRIPES",         "EASTER_EGGS"} //plain
+	};
+
+	public static final String[] PATTERNS = {"SPOTS", "CAMO", "STRIPES", "PLAIN"};
+
+	public static String getPattern(int[] genotype) {
+		if(genotype[0] == genotype[1] && genotype[2] != 1) {
+			return PATTERNS[genotype[0]];
+		} else {
+			return PATTERN_PHENOTYPES[genotype[0]][genotype[1]];
+		}
+	}
 }
 
-// public static final ArrayList<String> colorsList = new ArrayList<String>(
-// Arrays.asList("RED", "ORN", "YLW", "GRN", "BLU", "PRP", "WHT", "BLK",
-// "GLS"));
+// public static final ArrayList<String> colorsList = new ArrayList<String>(Arrays.asList("RED", "ORN", "YLW", "GRN", "BLU", "PRP", "WHT", "BLK", "GLS"));
 // // 3 5 3 5 3 5 7 2 9
 // public static final int[] prices = {
 // 3, 5, 3, 5, 3, 5, 7, 2, 9};
-
-// public static int[][] phenoToGeno = {
-// {0, 0},
-// {1, 0},
-// {1, 1},
-// {2, 1},
-// {2, 2},
-// {0, 2},
-// {4, 4},
-// {3, 3},
-// {4, 3} };

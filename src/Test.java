@@ -1,5 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Test {
 	public static void main(String[] args) throws IOException{
@@ -7,12 +7,9 @@ public class Test {
 		String save = gs.save();
 		//System.out.println(save);
 		gs = new GameState(save);
-		System.out.println(gs.dex[0][1][1]);
-	}
-
-	public int[] fill(int[] hi) {
-		int[] hello = {1, 2, 3};
-		hi = hello;
-		return hi;
+		TreeMap<String, int[]> map = new TreeMap<>();
+		map.put("hi", new int[]{1, 2, 3});
+		map.get("hi")[1] = 7;
+		System.out.println(Arrays.toString(map.get("hi")));
 	}
 }

@@ -1,8 +1,9 @@
 import java.util.TreeMap;
 
 class Frog implements Constants, Comparable<Frog> {
-	private TreeMap<String, int[]> genome;
+	public TreeMap<String, int[]> genome; //TODO: don't forget to put these back to private
 	private int age;
+	public boolean shiny;
 	private String nick;
 	private long originalOwner;
 	private long timestamp;
@@ -16,15 +17,16 @@ class Frog implements Constants, Comparable<Frog> {
 	public Frog(long owner) {
 		originalOwner = owner;
 		random = (long) (Math.random() * 10_000_000_000_000L);
-		timestamp = System.nanoTime();
+		timestamp = System.currentTimeMillis();
 		age = 0;
+		shiny = (int)(Math.random() * 8192) == 0;
 		genome = new TreeMap<>();
 		nick = NAMES[(int) (Math.random() * NAMES.length)];
 	}
 
-	public Frog(long owner, Frog otherParent) {
+	public Frog(long owner, Frog parentOne, Frog parentTwo) {
 		this(owner);
-		genome = getGenome(genome, otherParent.genome);
+		genome = getGenome(parentOne.genome, parentTwo.genome);
 	}
 
 	private TreeMap<String, int[]> getGenome(TreeMap<String, int[]> parentOne, TreeMap<String, int[]> parentTwo) {
@@ -40,6 +42,12 @@ class Frog implements Constants, Comparable<Frog> {
 				childGenes[i] = Math.round(Math.random()) == 0 ? parentOneGenes[i] : parentTwoGenes[i];
 			}
 			returnGenome.put(key, childGenes);
+		}
+		int[] arr = returnGenome.get("pattern");
+		if(arr[2] == 0 && (int)(Math.random() * 256) == 42) { //small chance of mutation
+			arr[2] = 1;
+		} else if(arr[2] == 1 && (int)(Math.random() * 2) == 0) { //higher chance of mutation not carrying through
+			arr[2] = 0;
 		}
 		return returnGenome;
 	}
@@ -62,6 +70,20 @@ class Frog implements Constants, Comparable<Frog> {
 
 	public int getAge() {
 		return age;
+	}
+
+	private String getGenomeString() {
+		String ret = shiny ? "*" : "";
+		ret += Constants.getColor(genome.get("base"));
+		ret += " with ";
+		ret += Constants.getColor(genome.get("accent")) + " ";
+		ret += Constants.getPattern(genome.get("pattern"));
+		ret += " Owner ID: " + originalOwner;
+		return ret;
+	}
+
+	public String toString() {
+		return String.format("%s, %s. Age %d.", getNick(), getGenomeString(), getAge());
 	}
 
 	/**
