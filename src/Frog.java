@@ -1,7 +1,6 @@
-import java.util.TreeMap;
 
 class Frog implements Constants, Comparable<Frog> {
-	public TreeMap<String, int[]> genome; //TODO: don't forget to put these back to private
+	public int genome; //TODO: don't forget to put these back to private
 	private int age;
 	public boolean shiny;
 	private String nick;
@@ -16,40 +15,54 @@ class Frog implements Constants, Comparable<Frog> {
 	 */
 	public Frog(long owner) {
 		originalOwner = owner;
-		random = (long) (Math.random() * 10_000_000_000_000L);
+		random = (long) (Math.random() * Long.MAX_VALUE);
 		timestamp = System.currentTimeMillis();
 		age = 0;
-		shiny = (int)(Math.random() * 8192) == 0;
-		genome = new TreeMap<>();
+		shiny = (int) (Math.random() * 8192) == 0;
+		genome = 0;
 		nick = NAMES[(int) (Math.random() * NAMES.length)];
 	}
 
-	public Frog(long owner, Frog parentOne, Frog parentTwo) {
+	public Frog(long owner, Frog p1, Frog p2) {
 		this(owner);
-		genome = getGenome(parentOne.genome, parentTwo.genome);
+		genome = getGenome(p1.genome, p2.genome);
 	}
 
-	private TreeMap<String, int[]> getGenome(TreeMap<String, int[]> parentOne, TreeMap<String, int[]> parentTwo) {
-		if(parentOne.size() != parentTwo.size()) {
-			return null;
+	/**
+	 * A genome is a 32-bit int. From LSB:
+	 * - 6 bits for primary color, broken into 3 + 3 alleles
+	 * - 6 bits for secondary color, broken into 3 + 3 alleles
+	 * - 8 bits for pattern, broken into 1 + 1 + 3 + 3 (unimplemented, special, pattern allele 1, 2)
+	 * @param p1 The integer representing the first frog gamete
+	 * @param p2 The integer representing the second frog gamete
+	 * @return An integer representing the resulting genome
+	 */
+	private int getGenome(int p1, int p2) {
+		//primary color
+		int pColorOne = rand() ? p1 & 0x3 : p2 & 0x3;
+		int pColorTwo = rand() ? p1 >> 3 & 0x3 : p2 >> 3 & 0x3;
+
+		//secondary
+		int sColorOne = rand() ? p1 >> 6 & 0x3 : p2 >> 6 & 0x3;
+		int sColorTwo = rand() ? p1 >> 9 & 0x3 : p2 >> 9 & 0x3;
+
+		//Pattern
+		int pOne = rand() ? p1 >> 12 & 0x3 : p2 >> 12 & 0x3;
+		int pTwo = rand() ? p1 >> 15 & 0x3 : p2 >> 15 & 0x3;
+		int pSpecial = rand() ? p1 >> 16 & 0x3 : p2 >> 16 & 0x3;
+		int pOther = 0;
+
+		if(pSpecial == 0 && (int)(Math.random() * 256) == 42) { //small chance of mutation
+			pSpecial = 1;
+		} else if(pSpecial == 1 && (int)(Math.random() * 2) == 0) { //higher chance of mutation not carrying through
+			pSpecial = 0;
 		}
-		TreeMap<String, int[]> returnGenome = new TreeMap<>();
-		for(String key : parentOne.keySet()) {
-			int[] parentOneGenes = parentOne.get(key);
-			int[] parentTwoGenes = parentTwo.get(key);
-			int[] childGenes = new int[parentOneGenes.length];
-			for(int i = 0; i < childGenes.length; i++) {
-				childGenes[i] = Math.round(Math.random()) == 0 ? parentOneGenes[i] : parentTwoGenes[i];
-			}
-			returnGenome.put(key, childGenes);
-		}
-		int[] arr = returnGenome.get("pattern");
-		if(arr[2] == 0 && (int)(Math.random() * 256) == 42) { //small chance of mutation
-			arr[2] = 1;
-		} else if(arr[2] == 1 && (int)(Math.random() * 2) == 0) { //higher chance of mutation not carrying through
-			arr[2] = 0;
-		}
-		return returnGenome;
+
+		return pColorOne + pColorTwo << 3 + sColorOne << 6 + sColorTwo << 9 + pOne << 12 + pTwo << 15 + pSpecial << 16 + pOther << 17;
+	}
+
+	private boolean rand() {
+		return (int) (Math.random() * 2) == 0;
 	}
 
 	/**
@@ -74,10 +87,10 @@ class Frog implements Constants, Comparable<Frog> {
 
 	private String getGenomeString() {
 		String ret = shiny ? "*" : "";
-		ret += Constants.getColor(genome.get("base"));
+		ret += Constants.getColor(genome & 0x3F);
 		ret += " with ";
-		ret += Constants.getColor(genome.get("accent")) + " ";
-		ret += Constants.getPattern(genome.get("pattern"));
+		ret += Constants.getColor(genome >> 6 & 0x3F) + " ";
+		ret += Constants.getPattern(genome >> 12 & 0xFF);
 		ret += " Owner ID: " + originalOwner;
 		return ret;
 	}

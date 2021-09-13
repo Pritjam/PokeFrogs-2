@@ -14,9 +14,9 @@ public class Game implements Constants {
 
 		//TODO: this is dev stuff
 		Frog newFrog = new Frog(gs.ownerID);
-		newFrog.genome.put("base", new int[]{0, 1}); //ORN
-		newFrog.genome.put("accent", new int[]{3, 4}); //GLS
-		newFrog.genome.put("pattern", new int[]{0, 0, 1}); //STARS
+		// newFrog.genome.put("base", new int[]{0, 1}); //ORN
+		// newFrog.genome.put("accent", new int[]{3, 4}); //GLS
+		// newFrog.genome.put("pattern", new int[]{0, 0, 1}); //STARS
 		newFrog.shiny = true;
 		gs.megabox.get(0).add(newFrog);
 

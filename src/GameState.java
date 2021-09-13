@@ -12,12 +12,12 @@ public class GameState implements Serializable {
 	protected int money;
 
 	public GameState() {
-		ownerID = System.nanoTime();
+		ownerID = System.currentTimeMillis();
 		megabox = new ArrayList<>(10);
 		for (int i = 0; i < 10; i++) {
 			megabox.add(new TreeSet<>());
 		}
-		dex = new boolean[100][100][100];
+		dex = new boolean[9][9][10];
 		money = 0;
 	}
 
