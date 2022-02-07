@@ -5,6 +5,7 @@ public interface Constants {
 	// combination table to get a color from a given pair of alleles
 	// for example, COLOR_PHENOTYPES[1][2] represents the phenotype of a frog
 	// with color genotype {1, 2}, meaning a color of green
+	// implemented as 6 bits-3 and 3, realistically up to 64 phenotypes
 	public static final String[][] COLOR_PHENOTYPES = {
 			//0:red  1:ylw  2:blu  3:blk  4:wht
 			{ "RED", "ORN", "PRP", "BLK", "RED" }, // red
@@ -16,7 +17,9 @@ public interface Constants {
 
 	/**
 	 * A method to get the color from a given genotype
-	 * @param genotype the int[] representation of the color genes
+	 * @param genotype the int representation of the color genes. This is written as so:
+	 * - 3 bits for the first allele
+	 * - 3 bits for the second allele
 	 * @return the 3-letter String of the phenotype
 	 */
 	public static String getColor(int[] genotype) {
@@ -38,11 +41,22 @@ public interface Constants {
 
 	public static final String[] PATTERNS = {"SPOTS", "CAMO", "STRIPES", "PLAIN"};
 
-	public static String getPattern(int[] genotype) {
-		if(genotype[0] == genotype[1] && genotype[2] != 1) {
-			return PATTERNS[genotype[0]];
+	/**
+	 * 
+	 * @param genotype an int representation of the genotype, composed of:
+	 * - 1 bit for other information
+	 * - 1 bit for special information about homozygous
+	 * - 3 bits for first allele
+	 * - 3 bits for second allele
+	 * @return the string that represents the pattern of this one
+	 */
+	public static String getPattern(int genotype) {
+		int one = genotype & 0x3;
+		int two = (genotype >> 3) & 0x3;
+		if(one == two && ((genotype >> 6) & 0x1) == 0) {
+			return PATTERNS[genotype & 0x3];
 		} else {
-			return PATTERN_PHENOTYPES[genotype[0]][genotype[1]];
+			return PATTERN_PHENOTYPES[genotype & 0x3][(genotype >> 3) & 0x3];
 		}
 	}
 }

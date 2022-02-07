@@ -5,6 +5,9 @@ public class Test {
 	public static void main(String[] args) throws IOException{
 		GameState gs = new GameState();
 		String save = gs.save();
+		BufferedWriter writer = new BufferedWriter(new FileWriter("out.txt"));
+		writer.write(save);
+		writer.close();
 		//System.out.println(save);
 		gs = new GameState(save);
 		TreeMap<String, int[]> map = new TreeMap<>();

@@ -14,7 +14,7 @@ class Frog implements Constants, Comparable<Frog> {
 	 */
 	public Frog(long owner) {
 		originalOwner = owner;
-		random = (long) (Math.random() * 10_000_000_000_000L);
+		random = (long) (Math.random() * Long.MAX_VALUE);
 		timestamp = System.currentTimeMillis();
 		age = 0;
 		shiny = (int)(Math.random() * 8192) == 0;
@@ -22,9 +22,9 @@ class Frog implements Constants, Comparable<Frog> {
 		nick = NAMES[(int) (Math.random() * NAMES.length)];
 	}
 
-	public Frog(long owner, Frog parentOne, Frog parentTwo) {
+	public Frog(long owner, Frog p1, Frog p2) {
 		this(owner);
-		genome = Genome.cross(parentOne.genome, parentTwo.genome);
+		genome = Genome.cross(p1.genome, p2.genome);
 	}
 
 	/**
