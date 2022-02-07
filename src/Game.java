@@ -8,23 +8,22 @@ public class Game implements Constants {
 
 		//api GET call will happen here
 		System.out.println("Welcome back " + username);
-		String serializedGameState = "";
+		//String serializedGameState = "";
 		GameState gs = new GameState();
 
 
 		//TODO: this is dev stuff
 		Frog newFrog = new Frog(gs.ownerID);
-		newFrog.genome.put("base", new int[]{0, 1}); //ORN
-		newFrog.genome.put("accent", new int[]{3, 4}); //GLS
-		newFrog.genome.put("pattern", new int[]{0, 0, 1}); //STARS
+		newFrog.genome.addGene("base", new Gene.MendelianMonogenetic(new int[]{0, 1})); //ORN
+		newFrog.genome.addGene("accent", new Gene.MendelianMonogenetic(new int[]{3, 4})); //GLS
+		newFrog.genome.addGene("pattern", new Gene.MendelianMonogenetic(new int[]{0, 0, 1})); //STARS
 		newFrog.shiny = true;
 		gs.megabox.get(0).add(newFrog);
 
 		System.out.println(newFrog.toString());
 
-		boolean gameRunning = true;
 		int box = 0;
-		while(gameRunning) {
+		while(true) {
 			System.out.println("Input command:");
 			String input = scan.nextLine();
 			String[] arguments = input.split(" ");
@@ -41,15 +40,16 @@ public class Game implements Constants {
 					System.out.println(gs.megabox.toString());
 					break;
 				case "exit":
-					gameRunning = false;
 					System.out.println("one moment...");
 					gs.save();
 					//TODO: actually have this use an UPDATE API call
 					System.out.println("See you next time!");
+					scan.close();
+					System.exit(0);
 					break;
 				case "switch":
 					if(arguments.length < 2) {
-						System.out.println("You need tp specify which box!");
+						System.out.println("You need to specify which box!");
 						break;
 					}
 					box = Integer.parseInt(arguments[1]);
@@ -63,7 +63,6 @@ public class Game implements Constants {
 					break;
 			}
 		}
-		scan.close();
 	}
 
 }

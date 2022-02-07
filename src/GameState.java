@@ -30,7 +30,7 @@ public class GameState implements Serializable {
 			oos.flush();
 			serializedString = Base64.getEncoder().encodeToString(baos.toByteArray());
 		} catch (IOException e) {
-			System.out.println("Problem!");
+			System.out.println("Error: IOException while saving game\n\t" + e.getMessage());
 		}
 		return serializedString;
 	}
@@ -46,9 +46,9 @@ public class GameState implements Serializable {
 			dex = gs.dex;
 			money = gs.money;
 		} catch (ClassNotFoundException e) {
-			System.out.println("Problem!");
+			System.out.println("Error: ClassNotFoundException while loading game\n\t" + e.getMessage());
 		} catch (IOException e) {
-			System.out.println("Problem!");
+			System.out.println("Error: IOException while loading game\n\t" + e.getMessage());
 		}
 	}
 

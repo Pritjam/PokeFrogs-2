@@ -1,7 +1,5 @@
-import java.util.TreeMap;
-
 class Frog implements Constants, Comparable<Frog> {
-	public TreeMap<String, int[]> genome; //TODO: don't forget to put these back to private
+	public Genome genome; //TODO: don't forget to put these back to private
 	private int age;
 	public boolean shiny;
 	private String nick;
@@ -20,36 +18,13 @@ class Frog implements Constants, Comparable<Frog> {
 		timestamp = System.currentTimeMillis();
 		age = 0;
 		shiny = (int)(Math.random() * 8192) == 0;
-		genome = new TreeMap<>();
+		genome = new Genome();
 		nick = NAMES[(int) (Math.random() * NAMES.length)];
 	}
 
 	public Frog(long owner, Frog parentOne, Frog parentTwo) {
 		this(owner);
-		genome = getGenome(parentOne.genome, parentTwo.genome);
-	}
-
-	private TreeMap<String, int[]> getGenome(TreeMap<String, int[]> parentOne, TreeMap<String, int[]> parentTwo) {
-		if(parentOne.size() != parentTwo.size()) {
-			return null;
-		}
-		TreeMap<String, int[]> returnGenome = new TreeMap<>();
-		for(String key : parentOne.keySet()) {
-			int[] parentOneGenes = parentOne.get(key);
-			int[] parentTwoGenes = parentTwo.get(key);
-			int[] childGenes = new int[parentOneGenes.length];
-			for(int i = 0; i < childGenes.length; i++) {
-				childGenes[i] = Math.round(Math.random()) == 0 ? parentOneGenes[i] : parentTwoGenes[i];
-			}
-			returnGenome.put(key, childGenes);
-		}
-		int[] arr = returnGenome.get("pattern");
-		if(arr[2] == 0 && (int)(Math.random() * 256) == 42) { //small chance of mutation
-			arr[2] = 1;
-		} else if(arr[2] == 1 && (int)(Math.random() * 2) == 0) { //higher chance of mutation not carrying through
-			arr[2] = 0;
-		}
-		return returnGenome;
+		genome = Genome.cross(parentOne.genome, parentTwo.genome);
 	}
 
 	/**
@@ -74,10 +49,10 @@ class Frog implements Constants, Comparable<Frog> {
 
 	private String getGenomeString() {
 		String ret = shiny ? "*" : "";
-		ret += Constants.getColor(genome.get("base"));
+		ret += Constants.getColor(genome.getInt("base"));
 		ret += " with ";
-		ret += Constants.getColor(genome.get("accent")) + " ";
-		ret += Constants.getPattern(genome.get("pattern"));
+		ret += Constants.getColor(genome.getInt("accent")) + " ";
+		ret += Constants.getPattern(genome.getInt("pattern"));
 		ret += " Owner ID: " + originalOwner;
 		return ret;
 	}

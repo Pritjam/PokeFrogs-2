@@ -29,7 +29,7 @@ public interface Constants {
 	// homozygous combination of a dominant gene has a small chance to result in 
 	// a mutation: spotted -> stars, camo -> fractal, and stripes -> spiral
 	public static final String[][] PATTERN_PHENOTYPES = {
-		//spot              camo            strp               pln
+		//spot              camo            stripes            plain
 		{"STARS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS"},      //SPOTTED
 		{"SPOTTED CAMO",    "FRACTALS",     "STRIPED CAMO",    "CAMO"},       //CAMO
 		{"SPOTTED STRIPES", "STRIPED CAMO", "SPIRALS",         "STRIPES"},    //STRIPED
@@ -46,6 +46,15 @@ public interface Constants {
 		}
 	}
 }
+
+/**
+ * Genotype of a frog:
+ * 
+ * "Base"   : 2-element color array, described in COLOR_PHENOTYPES. 9 colors total.
+ * "Accent" : 2-element color array, described in COLOR_PHENOTYPES. 9 colors total.
+ * "Pattern": 3-element color array, with first two denoting alleles and third 
+ *            denoting mutation. 11 patterns total.
+ */
 
 // public static final ArrayList<String> colorsList = new ArrayList<String>(Arrays.asList("RED", "ORN", "YLW", "GRN", "BLU", "PRP", "WHT", "BLK", "GLS"));
 // // 3 5 3 5 3 5 7 2 9
