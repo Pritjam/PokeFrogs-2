@@ -50,13 +50,13 @@ public interface Constants {
 	 * - 3 bits for second allele
 	 * @return the string that represents the pattern of this one
 	 */
-	public static String getPattern(int genotype) {
-		int one = genotype & 0x3;
-		int two = (genotype >> 3) & 0x3;
-		if(one == two && ((genotype >> 6) & 0x1) == 0) {
-			return PATTERNS[genotype & 0x3];
+	public static String getPattern(int[] genotype) {
+		int one = genotype[0];
+		int two = genotype[1];
+		if(one == two) {
+			return PATTERNS[one];
 		} else {
-			return PATTERN_PHENOTYPES[genotype & 0x3][(genotype >> 3) & 0x3];
+			return PATTERN_PHENOTYPES[one][two];
 		}
 	}
 }
