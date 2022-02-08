@@ -49,10 +49,10 @@ class Frog implements Constants, Comparable<Frog> {
 
 	private String getGenomeString() {
 		String ret = shiny ? "*" : "";
-		ret += Constants.getColor(genome.getInt("base"));
+		ret += genome.getString("base");
 		ret += " with ";
-		ret += Constants.getColor(genome.getInt("accent")) + " ";
-		ret += Constants.getPattern(genome.getInt("pattern"));
+		ret += genome.getString("accent") + " ";
+		ret += genome.getString("pattern"); //TODO: Write PatternGene just like ColorGene
 		ret += " Owner ID: " + originalOwner;
 		return ret;
 	}

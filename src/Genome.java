@@ -45,11 +45,6 @@ public class Genome {
         return genes.get(key).toString();
     }
 
-    //TODO: Rework this to use a ColorGene instead, and let ColorGene have it's own toString that does this
-    public int[] getInt(String key) {
-        return genes.get(key).getAlleles();
-    }
-
     // TODO: just for debugging
     public void addGene(String name, Gene gene) {
         genes.put(name, gene);

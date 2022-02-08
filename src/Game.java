@@ -5,14 +5,15 @@ public class Game implements Constants {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("Hi! Welcome to PokeFrogs! Please log in:");
 		String username = scan.nextLine();
+		// System.out.println("Enter your password:");
+		// String pass = scan.nextLine();
 
 		//api GET call will happen here
 		System.out.println("Welcome back " + username);
-		//String serializedGameState = "";
+		//String serializedGameState = ""; //API call here
 		GameState gs = new GameState();
 
-
-		//TODO: this is dev stuff
+		//TODO: this is dev stuff, remove it later or make a helper method for it
 		Frog newFrog = new Frog(gs.ownerID);
 		newFrog.genome.addGene("base", new Gene.MendelianMonogenetic(new int[]{0, 1})); //ORN
 		newFrog.genome.addGene("accent", new Gene.MendelianMonogenetic(new int[]{3, 4})); //GLS
