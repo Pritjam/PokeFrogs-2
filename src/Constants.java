@@ -2,64 +2,9 @@ public interface Constants {
 
 	public static final String[] NAMES = { "Jim", "Hank", "Todd" };
 
-	// combination table to get a color from a given pair of alleles
-	// for example, COLOR_PHENOTYPES[1][2] represents the phenotype of a frog
-	// with color genotype {1, 2}, meaning a color of green
-	// implemented as 6 bits-3 and 3, realistically up to 64 phenotypes
-	public static final String[][] COLOR_PHENOTYPES = {
-			//0:red  1:ylw  2:blu  3:blk  4:wht
-			{ "RED", "ORN", "PRP", "BLK", "RED" }, // red
-			{ "ORN", "YLW", "GRN", "BLK", "YLW" }, // ylw
-			{ "PRP", "GRN", "BLU", "BLK", "BLU" }, // blu
-			{ "BLK", "BLK", "BLK", "BLK", "GLS" }, // blk
-			{ "RED", "YLW", "BLU", "GLS", "WHT" }  // wht
-	};
-
-	/**
-	 * A method to get the color from a given genotype
-	 * @param genotype the int representation of the color genes. This is written as so:
-	 * - 3 bits for the first allele
-	 * - 3 bits for the second allele
-	 * @return the 3-letter String of the phenotype
-	 */
-	public static String getColor(int[] genotype) {
-		return COLOR_PHENOTYPES[genotype[0]][genotype[1]];
-	}
-
-	// combination table to get a pattern from a given pair of alleles
-	// basic options-plain (recessive), spotted, camo, stripes (all dominant)
-	// combo of any 2 dominants results in a mix (codominance)
-	// homozygous combination of a dominant gene has a small chance to result in 
-	// a mutation: spotted -> stars, camo -> fractal, and stripes -> spiral
-	public static final String[][] PATTERN_PHENOTYPES = {
-		//spot              camo            stripes            plain
-		{"STARS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS"},      //SPOTTED
-		{"SPOTTED CAMO",    "FRACTALS",     "STRIPED CAMO",    "CAMO"},       //CAMO
-		{"SPOTTED STRIPES", "STRIPED CAMO", "SPIRALS",         "STRIPES"},    //STRIPED
-		{"SPOTS",           "CAMO",         "STRIPES",         "EASTER_EGGS"} //plain
-	};
-
-	public static final String[] PATTERNS = {"SPOTS", "CAMO", "STRIPES", "PLAIN"};
-
-	/**
-	 * 
-	 * @param genotype an int representation of the genotype, composed of:
-	 * - 1 bit for other information
-	 * - 1 bit for special information about homozygous
-	 * - 3 bits for first allele
-	 * - 3 bits for second allele
-	 * @return the string that represents the pattern of this one
-	 */
-	public static String getPattern(int[] genotype) {
-		int one = genotype[0];
-		int two = genotype[1];
-		if(one == two) {
-			return PATTERNS[one];
-		} else {
-			return PATTERN_PHENOTYPES[one][two];
-		}
-	}
 }
+
+	
 
 /**
  * Genotype of a frog:

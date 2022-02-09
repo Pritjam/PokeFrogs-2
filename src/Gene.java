@@ -36,6 +36,11 @@ public interface Gene {
 
     public class ColorGene implements Gene {
         private int[] alleles;
+
+        
+        // combination table to get a color from a given pair of alleles
+	    // for example, COLOR_PHENOTYPES[1][2] represents the phenotype of a frog
+	    // with color genotype {1, 2}, meaning a color of green
         private static String[][] PHENOTYPES = {
 			//0:red  1:ylw  2:blu  3:blk  4:wht
 			{ "RED", "ORN", "PRP", "BLK", "RED" }, // red
@@ -72,5 +77,54 @@ public interface Gene {
         }
     }
 
-    //TODO: PatternGene
+    public class PatternGene implements Gene {
+        private int[] alleles;
+
+        // combination table to get a pattern from a given pair of alleles
+        // basic options-plain (recessive), spotted, camo, stripes (all dominant)
+        // combo of any 2 dominants results in a mix (codominance)
+        // homozygous combination of a dominant gene has a small chance to result in
+        // a mutation: spotted -> stars, camo -> fractal, and stripes -> spiral
+        private static String[][] PATTERN_PHENOTYPES = {
+                // spot               camo            stripes            plain
+                { "STARS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS" },      // SPOTTED
+                { "SPOTTED CAMO",    "FRACTALS",     "STRIPED CAMO",    "CAMO" },       // CAMO
+                { "SPOTTED STRIPES", "STRIPED CAMO", "SPIRALS",         "STRIPES" },    // STRIPED
+                { "SPOTS",           "CAMO",         "STRIPES",         "EASTER_EGGS" } // plain
+        };
+
+        public static String[] PATTERNS = {"SPOTS", "CAMO", "STRIPES", "PLAIN"};
+        
+        public PatternGene(int[] alleles) {
+            this.alleles = alleles;
+        }
+
+        public Gene applyGenetics(Gene other) {
+            if(!(other instanceof PatternGene)) {
+                return null; //TODO: Error?
+            }
+
+            PatternGene otherPattern = (PatternGene) other;
+            if(otherPattern.alleles.length != alleles.length) {
+                return null; //TODO: Error?
+            }
+
+            //TODO: Custom logic for mutations.
+            int[] newAlleles = new int[this.alleles.length];
+            for(int i = 0; i < this.alleles.length; i++) {
+                newAlleles[i] = random.nextBoolean() ? this.alleles[i] : otherPattern.alleles[i];
+            }
+
+            return new ColorGene(newAlleles);
+        }
+
+        //TODO: rework this. Let the 2d array have the normal combinations, let the plain array hold mutations?
+        public String toString() {
+            if (alleles[0] == alleles[1]) {
+                return PATTERNS[alleles[0]];
+            } else {
+                return PATTERN_PHENOTYPES[alleles[0]][alleles[1]];
+            }
+        }
+    }
 }
