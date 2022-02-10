@@ -87,18 +87,19 @@ public interface Gene {
         // a mutation: spotted -> stars, camo -> fractal, and stripes -> spiral
         private static String[][] PATTERN_PHENOTYPES = {
                 // spot               camo            stripes            plain
-                { "STARS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS" },      // SPOTTED
-                { "SPOTTED CAMO",    "FRACTALS",     "STRIPED CAMO",    "CAMO" },       // CAMO
-                { "SPOTTED STRIPES", "STRIPED CAMO", "SPIRALS",         "STRIPES" },    // STRIPED
+                { "SPOTS",           "SPOTTED CAMO", "SPOTTED STRIPES", "SPOTS" },      // SPOTTED
+                { "SPOTTED CAMO",    "CAMO",         "STRIPED CAMO",    "CAMO" },       // CAMO
+                { "SPOTTED STRIPES", "STRIPED CAMO", "STRIPES",         "STRIPES" },    // STRIPED
                 { "SPOTS",           "CAMO",         "STRIPES",         "EASTER_EGGS" } // plain
         };
 
-        public static String[] PATTERNS = {"SPOTS", "CAMO", "STRIPES", "PLAIN"};
+        public static String[] SPECIALS = {"STARS", "FRACTALS", "SPIRALS", "PLAIN"};
         
         public PatternGene(int[] alleles) {
             this.alleles = alleles;
         }
 
+        //let allele 2 be the "mutation" allele.
         public Gene applyGenetics(Gene other) {
             if(!(other instanceof PatternGene)) {
                 return null; //TODO: Error?
@@ -109,21 +110,27 @@ public interface Gene {
                 return null; //TODO: Error?
             }
 
-            //TODO: Custom logic for mutations.
             int[] newAlleles = new int[this.alleles.length];
-            for(int i = 0; i < this.alleles.length; i++) {
+            for(int i = 0; i < 2; i++) {
                 newAlleles[i] = random.nextBoolean() ? this.alleles[i] : otherPattern.alleles[i];
+            }
+
+            if(this.alleles[2] == 1 && otherPattern.alleles[2] == 1) {
+                newAlleles[2] = random.nextInt(64) > 59 ? 1 : 0;
+            } else if(this.alleles[2] == 1 ^ otherPattern.alleles[2] == 1) {
+                newAlleles[2] = random.nextInt(128) > 123 ? 1 : 0;
+            } else {
+                newAlleles[2] = random.nextInt(512) > 509 ? 1 : 0;
             }
 
             return new ColorGene(newAlleles);
         }
 
-        //TODO: rework this. Let the 2d array have the normal combinations, let the plain array hold mutations?
         public String toString() {
-            if (alleles[0] == alleles[1]) {
-                return PATTERNS[alleles[0]];
-            } else {
+            if (alleles[2] != 1) {
                 return PATTERN_PHENOTYPES[alleles[0]][alleles[1]];
+            } else {
+                return SPECIALS[alleles[0]];
             }
         }
     }
