@@ -3,13 +3,13 @@
 	"tasks": [
 		{
 			"type": "java",
-			"label": "java: exportjar:PokeFrogs-2",
 			"targetPath": "${workspaceFolder}/${workspaceFolderBasename}.jar",
 			"elements": [
 				"${compileOutput}",
 				"${dependencies}"
 			],
 			"problemMatcher": [],
+			"label": "java: exportjar:PokeFrogs-2",
 			"group": {
 				"kind": "build",
 				"isDefault": true
