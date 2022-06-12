@@ -1,23 +1,19 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.TreeSet;
 
 public class GameState implements Serializable {
 	private static final long serialVersionUID = 1;
 
-	protected boolean[][][] dex;
+	protected byte[][] dex;
 	protected long ownerID;
-	protected ArrayList<TreeSet<Frog>> megabox;
+	protected TreeSet<Frog> box;
 	protected int money;
 
 	public GameState() {
 		ownerID = System.currentTimeMillis();
-		megabox = new ArrayList<>(10);
-		for (int i = 0; i < 10; i++) {
-			megabox.add(new TreeSet<>());
-		}
-		dex = new boolean[9][9][10];
+		box = new TreeSet<>();
+		dex = new byte[11][12];
 		money = 0;
 	}
 
@@ -30,7 +26,8 @@ public class GameState implements Serializable {
 			oos.flush();
 			serializedString = Base64.getEncoder().encodeToString(baos.toByteArray());
 		} catch (IOException e) {
-			System.out.println("Error: IOException while saving game\n\t" + e.getMessage());
+			System.out.println("Error: IOException while saving game");
+			System.out.println(e.getMessage());
 		}
 		return serializedString;
 	}
@@ -42,7 +39,7 @@ public class GameState implements Serializable {
 			ObjectInputStream ois = new ObjectInputStream(bais);
 			GameState gs = (GameState) ois.readObject();
 			ownerID = gs.ownerID;
-			megabox = gs.megabox;
+			box = gs.box;
 			dex = gs.dex;
 			money = gs.money;
 		} catch (ClassNotFoundException e) {

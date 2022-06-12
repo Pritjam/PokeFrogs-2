@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Genome {
+public class Genome implements Serializable {
 
     /**
      * Genome of a frog:
@@ -12,14 +13,15 @@ public class Genome {
      */
     private HashMap<String, Gene> genes;
 
+	private static final long serialVersionUID = 1;
+
     public Genome() {
         genes = new HashMap<>();
     }
 
     /**
      * This method creates and returns a new Genome object resulting from a genetic
-     * cross between
-     * the two provided parent genomes.
+     * cross between the two provided parent genomes.
      * 
      * @param parentOne The first parent to take genetic data from
      * @param parentTwo The second parent to take genetic data from

@@ -1,11 +1,16 @@
-class Frog implements Constants, Comparable<Frog> {
+import java.io.Serializable;
+
+class Frog implements Constants, Comparable<Frog>, Serializable {
 	public Genome genome; //TODO: don't forget to put these back to private
 	private int age;
 	public boolean shiny;
-	private String nick;
+	private String nickname;
 	private long originalOwner;
 	private long timestamp;
-	private long random;
+	private long id;
+
+	private static final long serialVersionUID = 1;
+
 
 	/**
 	 * Constructor for a frog. Sets the originalOwner to the parameter owner, age to 0,
@@ -14,12 +19,12 @@ class Frog implements Constants, Comparable<Frog> {
 	 */
 	public Frog(long owner) {
 		originalOwner = owner;
-		random = (long) (Math.random() * Long.MAX_VALUE);
+		id = (long) (Math.random() * Long.MAX_VALUE);
 		timestamp = System.currentTimeMillis();
 		age = 0;
 		shiny = (int)(Math.random() * 8192) == 0;
 		genome = new Genome();
-		nick = NAMES[(int) (Math.random() * NAMES.length)];
+		nickname = NAMES[(int) (Math.random() * NAMES.length)];
 	}
 
 	public Frog(long owner, Frog p1, Frog p2) {
@@ -32,7 +37,7 @@ class Frog implements Constants, Comparable<Frog> {
 	 * @param newNick The new nickname.
 	 */
 	public void setNick(String newNick) {
-		nick = newNick;
+		nickname = newNick;
 	}
 
 	/**
@@ -40,7 +45,7 @@ class Frog implements Constants, Comparable<Frog> {
 	 * @return the nickname of this frog
 	 */
 	public String getNick() {
-		return nick;
+		return nickname;
 	}
 
 	public int getAge() {
@@ -52,13 +57,13 @@ class Frog implements Constants, Comparable<Frog> {
 		ret += genome.getString("base");
 		ret += " with ";
 		ret += genome.getString("accent") + " ";
-		ret += genome.getString("pattern"); //TODO: Write PatternGene just like ColorGene
-		ret += " Owner ID: " + originalOwner;
+		ret += genome.getString("pattern");
+		ret += ". Owner ID: " + originalOwner;
 		return ret;
 	}
 
 	public String toString() {
-		return String.format("%s, %s. Age %d.", getNick(), getGenomeString(), getAge());
+		return String.format("%s, %s. Age %d.", nickname, getGenomeString(), age);
 	}
 
 	/**
@@ -67,7 +72,7 @@ class Frog implements Constants, Comparable<Frog> {
 	 * @return the result of this.nick.compareTo(otherFrog.nick)
 	 */
 	public int compareTo(Frog otherFrog) {
-		return nick.compareTo(otherFrog.nick);
+		return nickname.compareTo(otherFrog.nickname);
 	}
 
 	/**
@@ -79,6 +84,6 @@ class Frog implements Constants, Comparable<Frog> {
 		}
 
 		Frog otherFrog = (Frog) other;
-		return otherFrog.random == random && otherFrog.timestamp == timestamp;
+		return otherFrog.id == id && otherFrog.timestamp == timestamp;
 	}
 }
